@@ -3,6 +3,7 @@ import pytest
 from unittest.mock import patch
 from blog import Blog
 
+base_url = "https://jsonplaceholder.typicode.com/posts"
 posts = [
         {'userId': 1, 'id': 1, 'title': 'Titulo teste 1', 'body': 'Conteudo do blog 1'},
         {'userId': 2, 'id': 2, 'title': 'Titulo teste 2', 'body': 'Teste de conteudo do blog 2'}
@@ -18,7 +19,7 @@ def test_post(fake_posts):
         mock_get.return_value.json.return_value = fake_posts
         blog = Blog()
         result = blog.posts()
-        mock_get.assert_called_once_with("https://jsonplaceholder.typicode.com/posts")
+        mock_get.assert_called_once_with(base_url)
         assert result == fake_posts
 
 @pytest.mark.parametrize("user_id, expected_post", [
@@ -30,7 +31,7 @@ def test_post_by_user_id(fake_posts, user_id, expected_post):
         mock_get.return_value.json.return_value = expected_post
         blog = Blog()
         result = blog.post_by_user_id(user_id)
-        expected_url = f"https://jsonplaceholder.typicode.com/posts/{user_id}"
+        expected_url = f"{base_url}/{user_id}"
         mock_get.assert_called_once_with(expected_url)
         assert result == result == expected_post
 
